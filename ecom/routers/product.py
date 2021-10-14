@@ -1,16 +1,21 @@
 from fastapi import APIRouter
-from database import get_db
+from ..database import get_db,BASE_PATH
 from sqlalchemy.orm import Session
-from main import templates
 from sqlalchemy import engine
 from sqlalchemy.sql.functions import mode
 from fastapi.responses import HTMLResponse
 from starlette.responses import RedirectResponse
-import models
+from ..import models
 from fastapi import FastAPI ,Response , Request ,Depends, Form ,status
-from database import SessionLocal, engine , get_db
+from ..database import SessionLocal, engine , get_db
 from sqlalchemy.orm.session import Session
 from ..repos import product
+from .. import schemas , models , database
+from fastapi.templating import Jinja2Templates
+
+
+templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
+
 
 router = APIRouter()
 

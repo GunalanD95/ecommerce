@@ -1,8 +1,8 @@
-import models
+from ..import models
 from fastapi import FastAPI ,Response , Request ,Depends
-from database import SessionLocal, engine , get_db
+from ..database import SessionLocal, engine , get_db
 from sqlalchemy.orm.session import Session
-import schemas
+from ..import schemas
 
 
 def create_product(title,description,price,db):
