@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 from .database import Base
-from sqlalchemy import Column,String,Text, Integer
+from sqlalchemy import Column,String,Text, Integer, Boolean , DECIMAL
+import datetime
 
-
-class Shop(Base):
-    __tablename__ = "shop"
+class Category(Base):
+    __tablename__ = "category"
 
     id = Column(Integer,primary_key=True,index=True)
     title = Column(String)
