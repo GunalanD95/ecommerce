@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 
-DATABASE_URL = "sqlite:///ecom/sql.db"
+DATABASE_URL = "sqlite:///sql.db"
 
 engine = create_engine(DATABASE_URL,connect_args={"check_same_thread": False})
 

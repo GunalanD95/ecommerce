@@ -5,13 +5,9 @@ from sqlalchemy.orm.session import Session
 from ..import schemas
 
 
-def create_product(title,description,price,db):
-    new_prod = models.Shop(title=title,description=description,price=price)
-    db.add(new_prod)
-    db.commit()
-    db.refresh(new_prod)
-    return new_prod    
+def list_product(request: schemas.Product,db: Session= Depends(get_db),category_slug: str = None):
+    if category_slug:
+        category = db.query(models.Category).filter_by(slug=category_slug).first()
+        return db.query(models.Product).filter_by(category=category).all()
 
-def list_product(db):
-    all_prods = db.query(models.Shop).all()
-    return all_prods   
+    return db.query(models.Product).all()

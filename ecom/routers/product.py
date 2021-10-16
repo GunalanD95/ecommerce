@@ -12,20 +12,26 @@ from sqlalchemy.orm.session import Session
 from ..repos import product
 from .. import schemas , models , database
 from fastapi.templating import Jinja2Templates
-
+from fastapi.encoders import jsonable_encoder
 
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 
 router = APIRouter()
 
-@router.post('/create',response_class=HTMLResponse)
-def create_prod(request:Request,title:str=Form(...),description:str=Form(...),price:int=Form(...),db: Session= Depends(get_db)):
-    product.create_product(title=title,description=description,price=price,db=db)
-    return RedirectResponse(url="/get_product",status_code=status.HTTP_303_SEE_OTHER)
+# @router.post('/create',response_class=HTMLResponse)
+# def create_prod(request:Request,title:str=Form(...),description:str=Form(...),price:int=Form(...),db: Session= Depends(get_db)):
+#     product.create_product(title=title,description=description,price=price,db=db)
+#     return RedirectResponse(url="/get_product",status_code=status.HTTP_303_SEE_OTHER)
 
 
-@router.get('/get_product',response_class=HTMLResponse)
-def get_prod(request:Request,db: Session= Depends(get_db)):
-    products = product.list_product(db)
-    return templates.TemplateResponse("index.html",{"request": request,"products": products})
+@router.get('/{category_slug}')
+def get_prod(request:Request,category_slug:str,db: Session= Depends(get_db), page: int=1):
+    products = product.list_product(request,category_slug=category_slug,db =db)[16*(page-1): 16*(page)]
+    categories = db.query(models.Category).all()
+    category = db.query(models.Category).filter_by(slug=category_slug).first()
+    return templates.TemplateResponse("list.html", {"request": request,
+                                                    "page": page,
+                                                    "product": jsonable_encoder(products),
+                                                    "category":jsonable_encoder(category),
+                                                    "categories":jsonable_encoder(categories),})

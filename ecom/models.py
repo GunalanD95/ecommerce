@@ -23,6 +23,8 @@ class Category(Base):
             kwargs['slug'] = slugify(kwargs.get('name',''))
         super(Category,self).__init__(self,*args,**kwargs)
 
+    product_category = relationship("Product", back_populates="category")
+
 
 class Product(Base):
     __tablename__ = "product"
@@ -36,7 +38,7 @@ class Product(Base):
     updated_date = Column(DateTime,onupdate=datetime.datetime.now())
     slug = Column(String,unique=True)
     category_id = Column(Integer, ForeignKey("category.id"))
-    category = relationship
+    category = relationship("Category", back_populates="product_category")
 
     def __init__(self,*args,**kwargs):
         if not 'slug' in kwargs:
