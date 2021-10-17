@@ -11,3 +11,9 @@ def list_product(request: schemas.Product,db: Session= Depends(get_db),category_
         return db.query(models.Product).filter_by(category=category).all()
 
     return db.query(models.Product).all()
+
+def product_details(db,id:int,slug:str):
+    product = db.query(models.Product).filter_by(id=id,slug=slug).first()
+
+    return product
+

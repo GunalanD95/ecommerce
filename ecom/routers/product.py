@@ -35,3 +35,10 @@ def get_prod(request:Request,category_slug:str,db: Session= Depends(get_db), pag
                                                     "product": jsonable_encoder(products),
                                                     "category":jsonable_encoder(category),
                                                     "categories":jsonable_encoder(categories),})
+
+
+@router.get('/{product_id}/{product_skug}')
+def prod_details(request:Request,product_id:int,product_slug:str,db: Session= Depends(get_db)):
+    products = jsonable_encoder(product.product_details(id=product_id,slug=product_slug,db =db))
+    return templates.TemplateResponse("detail.html",  {"request": request,
+                                                       "product": jsonable_encoder(products),})
