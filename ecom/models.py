@@ -37,11 +37,12 @@ class Product(Base):
     create_date = Column(Date,default=date.today())
     updated_date = Column(DateTime,onupdate=datetime.datetime.now())
     slug = Column(String,unique=True)
-    category_id = Column(Integer, ForeignKey("category.id"))
-    category = relationship("Category", back_populates="product_category")
+
 
     def __init__(self,*args,**kwargs):
         if not 'slug' in kwargs:
             kwargs['slug'] = slugify(kwargs.get('name',''))
         super(Product,self).__init__(self,*args,**kwargs)
 
+    category_id = Column(Integer, ForeignKey("category.id"))
+    category = relationship("Category", back_populates="product_category")

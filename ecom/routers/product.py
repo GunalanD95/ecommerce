@@ -13,6 +13,7 @@ from ..repos import product
 from .. import schemas , models , database
 from fastapi.templating import Jinja2Templates
 from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import HTTPException
 
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
@@ -37,8 +38,10 @@ def get_prod(request:Request,category_slug:str,db: Session= Depends(get_db), pag
                                                     "categories":jsonable_encoder(categories),})
 
 
-@router.get('/{product_id}/{product_skug}')
+@router.get('/{product_id}/{product_slug}')
 def prod_details(request:Request,product_id:int,product_slug:str,db: Session= Depends(get_db)):
     products = jsonable_encoder(product.product_details(id=product_id,slug=product_slug,db =db))
+    if products is None:
+        raise HTTPException(status_code=404,detail="product does not exit")
     return templates.TemplateResponse("detail.html",  {"request": request,
                                                        "product": jsonable_encoder(products),})

@@ -7,8 +7,8 @@ from ..import schemas
 
 def list_product(request: schemas.Product,db: Session= Depends(get_db),category_slug: str = None):
     if category_slug:
-        category = db.query(models.Category).filter_by(slug=category_slug).first()
-        return db.query(models.Product).filter_by(category=category).all()
+        category_related= db.query(models.Category).filter_by(slug=category_slug).first()
+        return db.query(models.Product).filter_by(category = category_related).all()
 
     return db.query(models.Product).all()
 
@@ -16,4 +16,6 @@ def product_details(db,id:int,slug:str):
     product = db.query(models.Product).filter_by(id=id,slug=slug).first()
 
     return product
+
+# def create_producr()
 

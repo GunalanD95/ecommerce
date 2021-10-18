@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ product.name }}
+{{ product.name }}
 {% endblock %}
 
 {% block content %}
@@ -32,7 +32,8 @@
                 <div class="product-details-img product-details-tab">
                     <div class="zoompro-wrap zoompro-2">
                         <div class="zoompro-border zoompro-span">
-                            <img class="zoompro" src="{% if product.url %}{{ product.url }}{% endif %}" data-zoom-image="{% if product.image %}{{ product.image.url }}{% endif %}" alt="" />
+                            <img class="zoompro" src="{% if product.url %}{{ product.url }}{% endif %}"
+                                data-zoom-image="{% if product.image %}{{ product.image.url }}{% endif %}" alt="" />
                         </div>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
                     </div>
                     <div class="pro-details-quality mt-0px">
                         <div class="pro-details-quality">
-                              <form action="/cart/add" method="post">
+                            <form action="/cart/add" method="post">
                                 <div class="cart-plus-minus">
                                     <input type="hidden" name="id" placeholder="id" value="{{product.id}}" />
                                     <input type="hidden" name="update" placeholder="update" value="False" />
@@ -70,7 +71,7 @@
                                 <div class="pro-details-cart btn-hover">
                                     <input class="form-deal-submit" type="submit" value="+ Add to cart">
                                 </div>
-                              </form>
+                            </form>
                         </div>
                     </div>
                 </div>
