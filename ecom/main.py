@@ -6,12 +6,18 @@ from . routers import product
 import os
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+import itsdangerous
 
 models.Base.metadata.create_all(bind=engine)
 
+secret_key = "cart"
+middleware = [
+    Middleware(SessionMiddleware,secret_key=secret_key)
+]
 
-app = FastAPI()
+app = FastAPI(middleware=middleware)
 app.include_router(product.router) 
 
 templates = Jinja2Templates(directory="templates")
