@@ -1,3 +1,7 @@
+from ..database import SessionLocal, engine , get_db
+from sqlalchemy.orm.session import Session
+from fastapi import FastAPI ,Response , Request ,Depends
+from fastapi.encoders import jsonable_encoder
 
 
 secret_key = "cart"
@@ -31,5 +35,30 @@ class Cart(object):
             del self.cart['product_id']
 
     def remove_all(self):
-        product_ids = 
+        product_ids = list(self.cart.keys())
 
+        for id in product_ids:
+            del self.cart[str(id)]
+
+    def __iter__(self):
+        product_ids = list(self.cart.keys())
+        products = self.db.query(
+            Product).filter(Product.id.in_(product_ids)
+            ).all()
+
+        cart = self.cart.copy()
+
+        for product in products:
+            cart[str(product.id)]['product'] = jsonable_encoder(product)
+
+        for item in cart.values():
+            item['total_price'] = float(item['price']) * float(item['quantity'])
+
+            yield item
+
+    def __len__(self):
+        return sum(item['quantity'] for item in self.cart.values())
+
+
+    def get_total_price(self):
+        return sum(float(item['price']) * float(item['quantity']) for item in self.cart.values())
