@@ -9,6 +9,8 @@ from pathlib import Path
 from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
 import itsdangerous
+from . cart import main
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -19,6 +21,9 @@ middleware = [
 
 app = FastAPI(middleware=middleware)
 app.include_router(product.router) 
+app.include_router(main.router) 
+
+
 
 templates = Jinja2Templates(directory="templates")
 
